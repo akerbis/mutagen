@@ -256,6 +256,22 @@ def write_files(edits, filenames, escape):
                         frame = mutagen.id3.TXXX(
                             encoding=3, text=value, desc=desc)
                         id3.add(frame)
+                elif frame == "PRIV":
+                    for value in vlist:
+                        values = string_split(value, ":", 1)
+                        if len(values) != 2:
+                            print_(u"Invalid number of values for PRIV tag.",
+                                   file=sys.stderr)
+                            continue
+                        try:
+                            desc, value = values[0], values[1]
+                            value = codecs.decode(value, "hex")
+                        except Exception as err:
+                            print_(str(err), file=sys.stderr)
+                            continue
+                        frame = mutagen.id3.PRIV(
+                            owner=desc, data=value)
+                        id3.add(frame)
                 elif issubclass(mutagen.id3.Frames[frame], mutagen.id3.UrlFrame):
                     frame = mutagen.id3.Frames[frame](encoding=3, url=vlist)
                     id3.add(frame)
@@ -369,7 +385,8 @@ def main(argv):
     for frame in mutagen.id3.Frames:
         if (issubclass(mutagen.id3.Frames[frame], mutagen.id3.TextFrame)
                 or issubclass(mutagen.id3.Frames[frame], mutagen.id3.UrlFrame)
-                or issubclass(mutagen.id3.Frames[frame], mutagen.id3.POPM)):
+                or issubclass(mutagen.id3.Frames[frame], mutagen.id3.POPM)
+                or issubclass(mutagen.id3.Frames[frame], mutagen.id3.PRIV)):
             parser.add_option(
                 "--" + frame, action="callback", help=SUPPRESS_HELP,
                 type='string', metavar="value",  # optparse blows up with this
