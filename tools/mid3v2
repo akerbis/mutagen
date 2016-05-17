@@ -278,7 +278,7 @@ def write_files(edits, filenames, escape):
                 else:
                     frame = mutagen.id3.Frames[frame](encoding=3, text=vlist)
                     id3.add(frame)
-            id3.save(filename)
+            id3.save(filename, padding=lambda x:0)
 
 
 def list_tags(filenames):
