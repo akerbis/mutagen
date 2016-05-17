@@ -460,7 +460,7 @@ class ID3(DictProxy, mutagen.Metadata):
             raise ValueError("Only 3 or 4 allowed for v2_version")
 
         # Sort frames by 'importance'
-        order = ["TIT2", "TPE1", "TRCK", "TALB", "TPOS", "TDRC", "TCON"]
+        order = ["PRIV", "TIT2", "TPE1", "TRCK", "TALB", "TPOS", "TDRC", "TCON"]
         order = dict((b, a) for a, b in enumerate(order))
         last = len(order)
         frames = sorted(self.items(),
